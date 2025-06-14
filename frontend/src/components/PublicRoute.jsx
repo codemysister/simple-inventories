@@ -3,7 +3,6 @@ import { useAuth } from "../contexts/AuthContext";
 
 const PublicRoute = ({ children, redirectTo = "/dashboard" }) => {
   const { user, isLoading } = useAuth();
-  console.log(isLoading);
 
   if (isLoading) {
     return (

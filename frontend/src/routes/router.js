@@ -4,6 +4,7 @@ import Login from "../pages/auth/Login";
 import Dashboard from "../pages/dashboard/Dashboard";
 import ProtectedRoute from "../components/ProtectedRoute";
 import PublicRoute from "../components/PublicRoute";
+import Product from "../pages/products/Product";
 
 const routes = [
   {
@@ -25,6 +26,10 @@ const routes = [
       {
         path: "dashboard",
         element: <Dashboard />,
+      },
+      {
+        path: "products",
+        element: <Product />,
       },
     ],
   },

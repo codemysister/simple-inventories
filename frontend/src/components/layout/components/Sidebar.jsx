@@ -14,7 +14,7 @@ const Sidebar = ({
         width: "280px",
         top: isMobile ? "0" : "70px",
         left: 0,
-        zIndex: 1041,
+        zIndex: 1050,
         transform: isMobile
           ? sidebarOpen
             ? "translateX(0)"

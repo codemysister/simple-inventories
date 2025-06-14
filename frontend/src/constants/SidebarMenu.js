@@ -78,11 +78,7 @@ const menuItems = [
         <line x1="12" y1="22.08" x2="12" y2="12" />
       </svg>
     ),
-    submenu: [
-      { id: "all-products", label: "All Products", href: "#" },
-      { id: "add-product", label: "Add Product", href: "#" },
-      { id: "categories", label: "Categories", href: "#" },
-    ],
+    href: "/products",
   },
   {
     id: "orders",

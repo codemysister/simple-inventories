@@ -8,7 +8,9 @@ import { useAuth } from "../../contexts/AuthContext";
 const MainLayout = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
-  const [activeMenu, setActiveMenu] = useState("dashboard");
+  const [activeMenu, setActiveMenu] = useState(
+    localStorage.getItem("activeMenu") || "dashboard"
+  );
   const [openSubmenus, setOpenSubmenus] = useState([]);
   const [isMobile, setIsMobile] = useState(false);
 
@@ -39,7 +41,7 @@ const MainLayout = ({ children }) => {
   }, [profileDropdownOpen]);
 
   // Prevent body scroll when sidebar is open on mobile
-  React.useEffect(() => {
+  useEffect(() => {
     if (isMobile && sidebarOpen) {
       document.body.style.overflow = "hidden";
     } else {
@@ -69,6 +71,7 @@ const MainLayout = ({ children }) => {
 
   const handleMenuClick = (menuId) => {
     setActiveMenu(menuId);
+    localStorage.setItem("activeMenu", menuId);
     // Close sidebar on mobile when menu item is clicked
     if (isMobile) {
       setSidebarOpen(false);
@@ -86,7 +89,7 @@ const MainLayout = ({ children }) => {
   };
 
   // Reset all hover states when active menu changes
-  React.useEffect(() => {
+  useEffect(() => {
     const resetMenuStyles = () => {
       const allMenuLinks = document.querySelectorAll(".nav-link");
       allMenuLinks.forEach((link) => {
@@ -108,7 +111,7 @@ const MainLayout = ({ children }) => {
   }, [activeMenu, menuItems]);
 
   // Clear hover styles when activeMenu changes
-  React.useEffect(() => {
+  useEffect(() => {
     const allMenuItems = document.querySelectorAll(".nav-link");
     allMenuItems.forEach((item) => {
       if (!item.classList.contains("active-menu")) {
