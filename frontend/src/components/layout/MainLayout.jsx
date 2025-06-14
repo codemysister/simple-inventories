@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
 import Sidebar from "./components/Sidebar";
 import menuItems from "../../constants/SidebarMenu";
 import { Outlet } from "react-router-dom";
+import Navbar from "./components/Navbar";
+import { useAuth } from "../../contexts/AuthContext";
 
 const MainLayout = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -10,8 +12,7 @@ const MainLayout = ({ children }) => {
   const [openSubmenus, setOpenSubmenus] = useState([]);
   const [isMobile, setIsMobile] = useState(false);
 
-  // Check if mobile on mount and resize
-  React.useEffect(() => {
+  useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 992);
       // Auto close sidebar when switching to mobile
@@ -127,183 +128,12 @@ const MainLayout = ({ children }) => {
   return (
     <div className="min-vh-100" style={{ backgroundColor: "#f8fafc" }}>
       {/* Navbar */}
-      <nav
-        className="navbar navbar-expand-lg fixed-top bg-white shadow-sm"
-        style={{
-          height: "70px",
-          borderBottom: "1px solid #e5e7eb",
-        }}
-      >
-        <div className="container-fluid px-4">
-          {/* Sidebar Toggle */}
-          <button
-            className={`btn ${isMobile ? "d-block" : "d-none"} me-3`}
-            type="button"
-            onClick={toggleSidebar}
-            style={{
-              fontSize: "18px",
-              color: "#6b7280",
-            }}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth="1.5"
-              stroke="currentColor"
-              width="24"
-              height="24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
-              />
-            </svg>{" "}
-          </button>
-
-          {/* Brand */}
-          <a
-            className="navbar-brand text-dark fw-bold d-flex align-items-center gap-2"
-            href="#"
-            style={{ fontSize: "22px" }}
-          >
-            Dashboard
-          </a>
-
-          {/* Spacer */}
-          <div className="flex-grow-1"></div>
-
-          {/* Profile Dropdown */}
-          <div className="position-relative profile-dropdown">
-            <button
-              className="btn d-flex align-items-center border-0 bg-transparent"
-              type="button"
-              onClick={toggleProfileDropdown}
-              style={{
-                borderRadius: "50px",
-                padding: "8px 16px",
-                transition: "all 0.2s ease",
-                color: "#6b7280",
-              }}
-              onMouseEnter={(e) => {
-                e.target.style.backgroundColor = "#f8fafc";
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.backgroundColor = "transparent";
-              }}
-            >
-              <div
-                className="rounded-circle d-flex align-items-center justify-content-center me-2"
-                style={{
-                  width: "32px",
-                  height: "32px",
-                  background:
-                    "linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)",
-                }}
-              >
-                <i
-                  className="fas fa-user text-white"
-                  style={{ fontSize: "14px" }}
-                ></i>
-              </div>
-              <span className="fw-semibold me-2">John Doe</span>
-              <i
-                className={`fas fa-chevron-${
-                  profileDropdownOpen ? "up" : "down"
-                }`}
-                style={{ fontSize: "12px" }}
-              ></i>
-            </button>
-
-            {/* Profile Dropdown Menu */}
-            {profileDropdownOpen && (
-              <div
-                className="position-absolute end-0 mt-2 bg-white rounded-3 shadow-lg border-0"
-                style={{
-                  minWidth: "200px",
-                  zIndex: 1050,
-                  animation: "fadeIn 0.2s ease",
-                }}
-              >
-                <div className="p-3 border-bottom">
-                  <div className="d-flex align-items-center">
-                    <div
-                      className="rounded-circle d-flex align-items-center justify-content-center me-3"
-                      style={{
-                        width: "40px",
-                        height: "40px",
-                        background:
-                          "linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)",
-                      }}
-                    >
-                      <i className="fas fa-user text-white"></i>
-                    </div>
-                    <div>
-                      <div className="fw-semibold text-dark">John Doe</div>
-                      <div className="small text-muted">john@example.com</div>
-                    </div>
-                  </div>
-                </div>
-                <div className="py-2">
-                  <a
-                    href="#"
-                    className="dropdown-item d-flex align-items-center px-3 py-2 text-decoration-none"
-                    style={{ transition: "all 0.2s ease" }}
-                    onMouseEnter={(e) =>
-                      (e.target.style.backgroundColor = "#f8fafc")
-                    }
-                    onMouseLeave={(e) =>
-                      (e.target.style.backgroundColor = "transparent")
-                    }
-                  >
-                    <i
-                      className="fas fa-user-edit me-3"
-                      style={{ color: "#6b7280", width: "16px" }}
-                    ></i>
-                    <span className="text-dark">Edit Profile</span>
-                  </a>
-                  <a
-                    href="#"
-                    className="dropdown-item d-flex align-items-center px-3 py-2 text-decoration-none"
-                    style={{ transition: "all 0.2s ease" }}
-                    onMouseEnter={(e) =>
-                      (e.target.style.backgroundColor = "#f8fafc")
-                    }
-                    onMouseLeave={(e) =>
-                      (e.target.style.backgroundColor = "transparent")
-                    }
-                  >
-                    <i
-                      className="fas fa-cog me-3"
-                      style={{ color: "#6b7280", width: "16px" }}
-                    ></i>
-                    <span className="text-dark">Account Settings</span>
-                  </a>
-                  <hr className="my-2" />
-                  <a
-                    href="#"
-                    className="dropdown-item d-flex align-items-center px-3 py-2 text-decoration-none"
-                    style={{ transition: "all 0.2s ease" }}
-                    onMouseEnter={(e) =>
-                      (e.target.style.backgroundColor = "#fef2f2")
-                    }
-                    onMouseLeave={(e) =>
-                      (e.target.style.backgroundColor = "transparent")
-                    }
-                  >
-                    <i
-                      className="fas fa-sign-out-alt me-3"
-                      style={{ color: "#ef4444", width: "16px" }}
-                    ></i>
-                    <span style={{ color: "#ef4444" }}>Logout</span>
-                  </a>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-      </nav>
+      <Navbar
+        isMobile={isMobile}
+        toggleSidebar={toggleSidebar}
+        toggleProfileDropdown={toggleProfileDropdown}
+        profileDropdownOpen={profileDropdownOpen}
+      />
 
       {/* Sidebar Overlay (Mobile) */}
       {sidebarOpen && isMobile && (

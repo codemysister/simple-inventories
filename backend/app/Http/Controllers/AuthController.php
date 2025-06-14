@@ -13,16 +13,23 @@ class AuthController extends Controller
 
         if (! $user || ! Hash::check($request->password, $user->password)) {
             return response()->json([
+                'error' => true,
                 'message' => 'Invalid credentials'
-            ], 401);
+            ], status: 401);
         }
 
         $token = $user->createToken('api-token')->plainTextToken;
 
         return response()->json([
+            'error' => false,
             'token' => $token,
             'user' => $user,
         ]);
+    }
+
+    function logout(Request $request) {
+        $request->user()->currentAccessToken()->delete();
+        return response()->json(['message' => 'Success logout']);
     }
 
 }

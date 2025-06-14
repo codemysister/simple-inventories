@@ -1,12 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { useAuth } from "../../contexts/AuthContext";
+import AuthServices from "../../services/AuthServices";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-    rememberMe: false,
-  });
+  const navigate = useNavigate();
+  const { login, user } = useAuth();
+  const [isLoading, setIsLoading] = useState(false);
+  const [loginError, setLoginErrors] = useState([]);
 
   const {
     register,
@@ -14,19 +16,19 @@ const Login = () => {
     watch,
     formState: { errors },
   } = useForm();
-  const [isLoading, setIsLoading] = useState(false);
 
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value,
-    }));
-  };
-
-  const onSubmit = (data) => {
+  const onSubmit = async (data, e) => {
+    e.preventDefault();
     setIsLoading((prev) => (prev = true));
-    alert("submitted");
+    try {
+      const response = await AuthServices.login(data.email, data.password);
+      login(response.token);
+      navigate("/dashboard");
+    } catch (err) {
+      setLoginErrors((prev) => (prev = err.response.data.message));
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -67,6 +69,10 @@ const Login = () => {
                 <p className="text-muted small mb-0">
                   Sign in to continue to your dashboard
                 </p>
+
+                {loginError && (
+                  <p className="text-danger small mt-2 mb-0">{loginError}</p>
+                )}
               </div>
 
               {/* Card Body */}
