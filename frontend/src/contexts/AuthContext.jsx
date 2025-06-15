@@ -10,7 +10,7 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const fetchUser = async () => {
-      if (token) {
+      if (token && user == null) {
         setIsLoading((prev) => (prev = true));
 
         try {

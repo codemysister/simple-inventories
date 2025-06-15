@@ -1,5 +1,11 @@
 import apiInterceptor from "./ApiInterceptor";
 
+const fetch = async (id) => {
+  const response = await apiInterceptor.get("/products/fetch");
+
+  return response.data;
+};
+
 const store = async (productData) => {
   const formData = new FormData();
 
@@ -49,6 +55,7 @@ const destroy = async (id) => {
 };
 
 export default {
+  fetch,
   store,
   update,
   destroy,

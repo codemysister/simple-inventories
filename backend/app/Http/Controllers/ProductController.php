@@ -118,8 +118,11 @@ class ProductController extends Controller
                 
             $product = Product::find($id);
 
-            if (!empty($product)) {
-
+            if (empty($product)) {
+                return response()->json([
+                    'error' => true,
+                    'message' => 'Product not found.',
+                ], 201);
             }
 
             $product->delete();
@@ -162,6 +165,27 @@ class ProductController extends Controller
             ]);
             
             throw new Exception('Failed to upload image: ' . $e->getMessage());
+        }
+    }
+
+    public function fetch()
+    {
+        try {
+            $products = Product::all();            
+            return response()->json([
+                'error' => false,
+                'message' => 'Fetch product successfully',
+                'data' => $products
+            ]);
+        } catch (Exception $e) {
+            Log::error('Fetch product failed', [
+                'error' => $e->getMessage(),
+            ]); 
+            return response()->json([
+                'error' => true,
+                'message' => 'Fetch product failed',
+                'data' => []
+            ]);           
         }
     }
 

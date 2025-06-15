@@ -20,7 +20,7 @@ class CreateProductsTable extends Migration
             $table->string('image')->nullable();
             $table->integer('price')->index();
             $table->string('stock_on_hand')->index();
-            $table->foreignId('created_by')->index();
+            $table->foreignId(column: 'created_by')->index();
             $table->timestamps();
         });
     }

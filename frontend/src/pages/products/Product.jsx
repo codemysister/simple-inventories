@@ -8,10 +8,12 @@ import DT from "datatables.net-bs5";
 import "bootstrap/dist/css/bootstrap.min.css"; // Bootstrap 5
 import "datatables.net-bs5/css/dataTables.bootstrap5.min.css"; // DataTables Bootstrap 5
 import $ from "jquery";
+import { useAuth } from "../../contexts/AuthContext";
 
 DataTable.use(DT);
 
 const Product = () => {
+  const { user } = useAuth();
   const [showModal, setShowModal] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedProduct, setSelectedProduct] = useState(null);
@@ -179,7 +181,19 @@ const Product = () => {
     { title: "Name", data: 0 },
     { title: "Price", data: 1 },
     { title: "OUM", data: 2 },
-    { title: "Image", data: 3 },
+    {
+      title: "Image",
+      data: 3,
+      render: function (data, type, row, meta) {
+        const imageUrl =
+          "http://127.0.0.1:8000" + data || "/images/no-image.png";
+        return `<img 
+                  src="${imageUrl}" 
+                  alt="Product Image" 
+                  style="width: 80px; height: 80px; object-fit: cover; border-radius: 6px;"
+                />`;
+      },
+    },
     { title: "Stock", data: 4 },
     {
       title: "Actions",
@@ -193,6 +207,10 @@ const Product = () => {
         const uom = row[2];
         const image = row[3];
         const stock = row[4];
+
+        if (user.role_names == "user") {
+          return `<span class="text-muted fst-italic">No actions available</span>`;
+        }
 
         return `
             <button class="btn btn-sm btn-primary me-2" onclick="handleEdit('${id}', '${name}', '${price}', '${uom}', '${image}', '${stock}')">Edit</button>
@@ -279,33 +297,35 @@ const Product = () => {
         </div>
 
         {/* Add Button */}
-        <button
-          className="btn text-white border-0 d-flex align-items-center"
-          onClick={() => {
-            setShowModal(true);
-            setIsEditMode(false);
-          }}
-          style={{
-            background: "linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)",
-            borderRadius: "12px",
-            padding: "12px 24px",
-            fontSize: "14px",
-            fontWeight: "600",
-            boxShadow: "0 4px 15px rgba(79, 172, 254, 0.3)",
-            transition: "all 0.2s ease",
-          }}
-          onMouseEnter={(e) => {
-            e.target.style.transform = "translateY(-1px)";
-            e.target.style.boxShadow = "0 6px 20px rgba(79, 172, 254, 0.4)";
-          }}
-          onMouseLeave={(e) => {
-            e.target.style.transform = "translateY(0)";
-            e.target.style.boxShadow = "0 4px 15px rgba(79, 172, 254, 0.3)";
-          }}
-        >
-          <i className="fas fa-plus me-2"></i>
-          Add Product
-        </button>
+        {user && user?.role_names == "admin" && (
+          <button
+            className="btn text-white border-0 d-flex align-items-center"
+            onClick={() => {
+              setShowModal(true);
+              setIsEditMode(false);
+            }}
+            style={{
+              background: "linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)",
+              borderRadius: "12px",
+              padding: "12px 24px",
+              fontSize: "14px",
+              fontWeight: "600",
+              boxShadow: "0 4px 15px rgba(79, 172, 254, 0.3)",
+              transition: "all 0.2s ease",
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.transform = "translateY(-1px)";
+              e.target.style.boxShadow = "0 6px 20px rgba(79, 172, 254, 0.4)";
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.transform = "translateY(0)";
+              e.target.style.boxShadow = "0 4px 15px rgba(79, 172, 254, 0.3)";
+            }}
+          >
+            <i className="fas fa-plus me-2"></i>
+            Add Product
+          </button>
+        )}
       </div>
 
       {/* Products Table */}
@@ -318,35 +338,44 @@ const Product = () => {
         </div>
         <div className="card-body p-4">
           <div className="table-responsive">
-            <DataTable
-              id="dataTable"
-              ref={dataTable}
-              ajax={ajax}
-              options={{
-                serverSide: true,
-                processing: true,
-                buttons: [
-                  {
-                    text: "Alert",
-                    action: function (e, dt, node, config, cb) {
-                      alert("Activated!");
+            {user == null ? (
+              <div className="text-center my-5">
+                <div className="spinner-border text-primary" role="status">
+                  <span className="visually-hidden">Loading...</span>
+                </div>
+                <div className="mt-2">Loading data...</div>
+              </div>
+            ) : (
+              <DataTable
+                id="dataTable"
+                ref={dataTable}
+                ajax={ajax}
+                options={{
+                  serverSide: true,
+                  processing: true,
+                  buttons: [
+                    {
+                      text: "Alert",
+                      action: function (e, dt, node, config, cb) {
+                        alert("Activated!");
+                      },
                     },
-                  },
-                ],
-              }}
-              columns={datatableColumns}
-              className="table table-striped"
-            >
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Price</th>
-                  <th>UOM</th>
-                  <th>Image</th>
-                  <th>Stock On Hand</th>
-                </tr>
-              </thead>
-            </DataTable>
+                  ],
+                }}
+                columns={datatableColumns}
+                className="table table-striped"
+              >
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>UOM</th>
+                    <th>Image</th>
+                    <th>Stock On Hand</th>
+                  </tr>
+                </thead>
+              </DataTable>
+            )}
 
             {filteredProducts.length === 0 && (
               <div className="text-center py-5">

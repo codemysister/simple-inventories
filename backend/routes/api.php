@@ -15,16 +15,28 @@ use Illuminate\Support\Facades\Route;
 */
 Route::post('/auth/login', 'AuthController@login'); 
 
-
-
 Route::middleware('auth:sanctum')->group(function(){
 
     // Products
     Route::prefix('products')->group(function(){
-        Route::post('/', 'ProductController@store');
-        Route::put('/{id}', 'ProductController@update');
+        
+        Route::get('/fetch', 'ProductController@fetch');
         Route::get('/get-data', 'ProductController@getData');
-        Route::delete('/{id}', 'ProductController@destroy');
+         Route::middleware('role:admin')->group(function () {
+            Route::post('/', 'ProductController@store');
+            Route::put('/{id}', 'ProductController@update');
+            Route::delete('/{id}', 'ProductController@destroy');
+        });
+    });
+
+     // Stock Movement
+    Route::prefix('stock-movements')->group(function(){
+        Route::post('/', 'StockMovementController@store');
+        Route::put('/{id}', 'StockMovementController@update');
+        Route::put('approve/{id}', 'StockMovementController@approve');
+        Route::put('reject/{id}', 'StockMovementController@reject');
+        Route::get('/get-data', 'StockMovementController@getData');
+        Route::delete('/{id}', action: 'StockMovementController@destroy');
     });
 
     Route::post('/auth/logout', 'AuthController@logout');

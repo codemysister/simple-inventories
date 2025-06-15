@@ -23,6 +23,7 @@ const Login = () => {
     try {
       const response = await AuthServices.login(data.email, data.password);
       login(response.token);
+      localStorage.setItem("activeMenu", "dashboard");
       navigate("/dashboard");
     } catch (err) {
       setLoginErrors((prev) => (prev = err.response.data.message));
@@ -189,20 +190,6 @@ const Login = () => {
                         </>
                       )}
                     </button>
-                  </div>
-
-                  {/* Sign Up Link */}
-                  <div className="text-center">
-                    <p className="text-muted small mb-0">
-                      Don't have an account?{" "}
-                      <a
-                        href="#"
-                        className="text-decoration-none fw-semibold"
-                        style={{ color: "#4facfe" }}
-                      >
-                        Create Account
-                      </a>
-                    </p>
                   </div>
                 </form>
               </div>

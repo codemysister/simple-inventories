@@ -5,6 +5,7 @@ import Dashboard from "../pages/dashboard/Dashboard";
 import ProtectedRoute from "../components/ProtectedRoute";
 import PublicRoute from "../components/PublicRoute";
 import Product from "../pages/products/Product";
+import StockMovement from "../pages/stock-movement/StockMovement";
 
 const routes = [
   {
@@ -30,6 +31,10 @@ const routes = [
       {
         path: "products",
         element: <Product />,
+      },
+      {
+        path: "stock-movements",
+        element: <StockMovement />,
       },
     ],
   },
