@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StockMovementRequest;
+use App\Jobs\SendStockMovementNotification;
 use App\Product;
 use App\StockMovement;
 use Exception;
@@ -26,6 +27,8 @@ class StockMovementController extends Controller
                 'created_by' => auth()->id(),
             ]);
 
+            SendStockMovementNotification::dispatch($stockMovements);
+         
             DB::commit();
             
             return response()->json([
