@@ -1,7 +1,7 @@
 import { Navigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 
-const PublicRoute = ({ children, redirectTo = "/dashboard" }) => {
+const PublicRoute = ({ children, redirectTo = "/stock-movements" }) => {
   const { user, isLoading } = useAuth();
 
   if (isLoading) {

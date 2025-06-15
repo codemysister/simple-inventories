@@ -340,33 +340,35 @@ const StockMovement = () => {
         </div>
 
         {/* Add Button */}
-        <button
-          className="btn text-white border-0 d-flex align-items-center"
-          onClick={() => {
-            setShowModal(true);
-            setIsEditMode(false);
-          }}
-          style={{
-            background: "linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)",
-            borderRadius: "12px",
-            padding: "12px 24px",
-            fontSize: "14px",
-            fontWeight: "600",
-            boxShadow: "0 4px 15px rgba(79, 172, 254, 0.3)",
-            transition: "all 0.2s ease",
-          }}
-          onMouseEnter={(e) => {
-            e.target.style.transform = "translateY(-1px)";
-            e.target.style.boxShadow = "0 6px 20px rgba(79, 172, 254, 0.4)";
-          }}
-          onMouseLeave={(e) => {
-            e.target.style.transform = "translateY(0)";
-            e.target.style.boxShadow = "0 4px 15px rgba(79, 172, 254, 0.3)";
-          }}
-        >
-          <i className="fas fa-plus me-2"></i>
-          Add Stock Movement
-        </button>
+        {user && user.role_names == "user" && (
+          <button
+            className="btn text-white border-0 d-flex align-items-center"
+            onClick={() => {
+              setShowModal(true);
+              setIsEditMode(false);
+            }}
+            style={{
+              background: "linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)",
+              borderRadius: "12px",
+              padding: "12px 24px",
+              fontSize: "14px",
+              fontWeight: "600",
+              boxShadow: "0 4px 15px rgba(79, 172, 254, 0.3)",
+              transition: "all 0.2s ease",
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.transform = "translateY(-1px)";
+              e.target.style.boxShadow = "0 6px 20px rgba(79, 172, 254, 0.4)";
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.transform = "translateY(0)";
+              e.target.style.boxShadow = "0 4px 15px rgba(79, 172, 254, 0.3)";
+            }}
+          >
+            <i className="fas fa-plus me-2"></i>
+            Add Stock Movement
+          </button>
+        )}
       </div>
 
       {/* Products Table */}

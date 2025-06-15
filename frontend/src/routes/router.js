@@ -25,10 +25,6 @@ const routes = [
     ),
     children: [
       {
-        path: "dashboard",
-        element: <Dashboard />,
-      },
-      {
         path: "products",
         element: <Product />,
       },

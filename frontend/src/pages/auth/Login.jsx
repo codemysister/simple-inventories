@@ -24,7 +24,7 @@ const Login = () => {
       const response = await AuthServices.login(data.email, data.password);
       login(response.token);
       localStorage.setItem("activeMenu", "dashboard");
-      navigate("/dashboard");
+      navigate("/stock-movements");
     } catch (err) {
       setLoginErrors((prev) => (prev = err.response.data.message));
     } finally {
